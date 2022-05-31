@@ -1,18 +1,38 @@
 pipeline{
 	agent any
 	stages{
-		stage('Build'){
+		stage('Maven Test'){
 			steps{
-				git branch: 'feature-HL3-179', credentialsId: 'laptop-token-2', url: 'https://github.com/Half-Life-3/aline-gateway-cs/'
-				bat '''git submodule init
-				git submodule sync
-				git submodule update
-				mvn clean package -DskipTests'''
+				bat 'mvn test'
 			}
 		}
-		stage('Archive'){
+		stage('Maven Package'){
 			steps{
-				archiveArtifacts artifacts: '**/target/gateway-0.0.1-SNAPSHOT.jar', fingerprint: true
+				bat 'mvn clean package'
+			}
+		}
+		stage('Docker Build'){
+			steps{
+				script{
+					gateway_image = docker.build("gateway_image:0.0.1")
+				}
+			}
+		}
+		stage('Docker Tag'){
+			steps{
+				script{
+					gateway_image.tag(["latest"])
+				}
+			}
+		}
+		stage('Docker Push'){
+			steps{
+				script{
+					docker.withRegistry("https://${env.AWS_ACCOUNT_NUMBER}.dkr.ecr.us-east-1.amazonaws.com",
+							    'ecr:us-east-1:AWS_IAM_USER') {
+						gateway_image.push('latest')
+					}
+				}
 			}
 		}
 	}
