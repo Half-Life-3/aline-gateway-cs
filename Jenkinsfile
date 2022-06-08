@@ -14,7 +14,7 @@ pipeline{
 		stage('Docker Build'){
 			steps{
 				script{
-					gateway_image = docker.build("gateway_image:0.0.1")
+					gateway_image = docker.build("gateway-image:0.0.1")
 				}
 			}
 		}
