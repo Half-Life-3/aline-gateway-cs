@@ -3,18 +3,23 @@ pipeline{
 	stages{
 		stage('Maven Test'){
 			steps{
-				bat 'mvn test'
+				sh 'mvn test'
+			}
+		}
+		stage('SonarQube Analysis') {
+			steps{
+				sh "mvn sonar:sonar"
 			}
 		}
 		stage('Maven Package'){
 			steps{
-				bat 'mvn clean package'
+				sh 'mvn clean package'
 			}
 		}
 		stage('Docker Build'){
 			steps{
 				script{
-					gateway_image = docker.build("gateway-image:0.0.1")
+					gateway_image = docker.build("gateway_image_cs")
 				}
 			}
 		}
@@ -28,9 +33,9 @@ pipeline{
 		stage('Docker Push'){
 			steps{
 				script{
-					docker.withRegistry("https://${env.AWS_ACCOUNT_NUMBER}.dkr.ecr.us-east-1.amazonaws.com",
-							    'ecr:us-east-1:AWS_IAM_USER') {
-						gateway_image.push('latest')
+					docker.withRegistry("https://${env.AWS_ACCOUNT}.amazonaws.com",
+							    "${env.AWS_CREDS}") {
+						gateway_image.push()
 					}
 				}
 			}
