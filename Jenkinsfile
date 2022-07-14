@@ -8,9 +8,18 @@ pipeline{
 		}
 		stage('SonarQube Analysis') {
 			steps{
-				sh "mvn sonar:sonar"
+				withSonarQubeEnv(installationName: "SonarQube") {
+					sh "mvn verify sonar:sonar"
+				}
 			}
 		}
+		stage('Quality Gate') {
+      		steps {
+        		timeout(time: 3, unit: 'MINUTES') {
+          			waitForQualityGate abortPipeline: true
+        		}
+      		}		
+    	}
 		stage('Maven Package'){
 			steps{
 				sh 'mvn clean package'
