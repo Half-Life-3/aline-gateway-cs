@@ -9,7 +9,7 @@ pipeline{
 		stage('SonarQube Analysis') {
 			steps{
 				withSonarQubeEnv(installationName: "SonarQube") {
-					sh "mvn verify sonar:sonar"
+					sh "mvn verify sonar:sonar -Dsonar.projectName=gateway-project-cs"
 				}
 			}
 		}
@@ -42,7 +42,7 @@ pipeline{
 		stage('Docker Push'){
 			steps{
 				script{
-					docker.withRegistry("https://${env.AWS_ACCOUNT}.amazonaws.com",
+					docker.withRegistry("https://${env.AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com",
 							    "${env.AWS_CREDS}") {
 						gateway_image.push()
 					}
