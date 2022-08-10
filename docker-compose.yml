@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  # account:
+  #   image: ${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/account_image_cs:latest
+  #   ports:
+  #     - "8072:8072"
+  #   environment: 
+  #     DB_USERNAME: ${DB_USERNAME_CS}
+  #     DB_PASSWORD: ${DB_PASSWORD_CS}
+  #     DB_HOST: ${DB_HOST_CS}
+  #     DB_PORT: ${DB_PORT_CS}
+  #     DB_NAME: ${DB_NAME_CS}
+  #     ENCRYPT_SECRET_KEY: ${ENCRYPT_SECRET_KEY_CS} 
+  #     JWT_SECRET_KEY: ${JWT_SECRET_KEY_CS}
+  # bank:
+  #   image: ${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/bank_image_cs:latest
+  #   ports:
+  #     - "8083:8083"
+  #   environment:
+  #     - DB_USERNAME=${DB_USERNAME_CS}
+  #     - DB_PASSWORD=${DB_PASSWORD_CS}
+  #     - DB_HOST=${DB_HOST_CS}
+  #     - DB_PORT=${DB_PORT_CS}
+  #     - DB_NAME=${DB_NAME_CS}
+  #     - ENCRYPT_SECRET_KEY=${ENCRYPT_SECRET_KEY_CS} 
+  #     - JWT_SECRET_KEY=${JWT_SECRET_KEY_CS}
+  gateway:
+    image: ${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/gateway_image_cs:latest
+    ports:
+      - "4000:4000"
+    environment:
+      - APP_SERVICE_HOST=localhost
+  # transaction:
+  #   image: ${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/transaction_image_cs:latest
+  #   ports:
+  #     - "8073:8073"
+  #   environment:
+  #     - DB_USERNAME=${DB_USERNAME_CS}
+  #     - DB_PASSWORD=${DB_PASSWORD_CS}
+  #     - DB_HOST=${DB_HOST_CS}
+  #     - DB_PORT=${DB_PORT_CS}
+  #     - DB_NAME=${DB_NAME_CS}
+  #     - ENCRYPT_SECRET_KEY=${ENCRYPT_SECRET_KEY_CS} 
+  #     - JWT_SECRET_KEY=${JWT_SECRET_KEY_CS}
+  # underwriter:
+  #   image: ${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/underwriter_image_cs:latest
+  #   ports:
+  #     - "8071:8071"
+  #   environment:
+  #     - DB_USERNAME=${DB_USERNAME_CS}
+  #     - DB_PASSWORD=${DB_PASSWORD_CS}
+  #     - DB_HOST=${DB_HOST_CS}
+  #     - DB_PORT=${DB_PORT_CS}
+  #     - DB_NAME=${DB_NAME_CS}
+  #     - ENCRYPT_SECRET_KEY=${ENCRYPT_SECRET_KEY_CS} 
+  #     - JWT_SECRET_KEY=${JWT_SECRET_KEY_CS}
+  # user:
+  #   image: ${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/user_image_cs:latest
+  #   ports:
+  #     - "8070:8070" 
+  #   environment:
+  #     - APP_PORT=8070
+  #     - DB_USERNAME=${DB_USERNAME_CS}
+  #     - DB_PASSWORD=${DB_PASSWORD_CS}
+  #     - DB_HOST=${DB_HOST_CS}
+  #     - DB_PORT=${DB_PORT_CS}
+  #     - DB_NAME=${DB_NAME_CS}
+  #     - ENCRYPT_SECRET_KEY=${ENCRYPT_SECRET_KEY_CS} 
+  #     - JWT_SECRET_KEY=${JWT_SECRET_KEY_CS}

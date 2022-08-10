@@ -49,5 +49,28 @@ pipeline{
 				}
 			}
 		}
+		stage('ECS Run'){
+			steps{
+				sh "aws configure set aws_access_key_id ${env.AWS_TEAM_ACCESS_ID} --profile ecs_cs"
+				sh "aws configure set aws_secret_access_key ${env.AWS_TEAM_SECRET_ID} --profile ecs_cs"
+				sh "aws configure set default.region us-east-1"
+				sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${env.AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com"
+				sh "export AWS_SECRET_ACCESS_KEY=${env.AWS_TEAM_SECRET_ID}"
+				sh "export AWS_ACCESS_KEY_ID=${env.AWS_TEAM_ACCESS_ID}"
+				sh "docker context create ecs ecs_context_cs --profile ecs_cs"
+				sh "docker context use ecs_context_cs"
+				sh "docker compose -p 'ecs-cs' up -d"
+			}
+		}
+	}
+	post {
+		always {
+			sh 'docker context use default'
+			sh 'docker context rm ecs_context_cs'
+			sh 'sudo docker logout'
+			sh 'sudo rm -rf ~/.aws/'
+			sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'
+			sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'
+		}
 	}
 }
